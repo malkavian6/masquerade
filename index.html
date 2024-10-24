@@ -1,222 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roll Multiple 10-Sided Dice</title>
-
-  <!-- Google Font for styling -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* General body styling with dark background */
-    body {
-      background-color: #121212; /* Dark background */
-      color: #f1f1f1; /* Light text color */
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    /* Styling the image to appear at the top center and set to half size */
-    .top-image {
-      margin-top: 20px;
-      width: 200px; /* Set the image to a fixed width (half size of its original dimensions) */
-      height: auto; /* Ensure the height scales proportionally */
-    }
-
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      color: #ff5252; /* Highlighted heading color (red) */
-    }
-
-    label, input, button {
-      font-size: 1.2em;
-      color: #f1f1f1;
-    }
-
-    #roll-button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #ff5252; /* Red button */
-      border: none;
-      border-radius: 5px;
-      font-size: 1.2em;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    #roll-button:hover {
-      background-color: #d32f2f; /* Darker red on hover */
-    }
-
-    /* Dice container and dice styling */
-    .dice-container {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 30px;
-    }
-
-    .dice {
-      width: 100px;
-      height: 100px;
-      position: relative;
-      perspective: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      cursor: pointer;
-      background-color: #263238; /* Dark dice background */
-    }
-
-    .face {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      text-align: center;
-      font-size: 2em;
-      font-weight: bold;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-    }
-
-    .face.blue {
-      background-color: #64b5f6; /* Blue */
-      color: #121212;
-    }
-
-    .face.red {
-      background-color: #ff5252; /* Red */
-      color: #121212;
-    }
-
-    @keyframes roll {
-      0% { transform: rotateX(0) rotateY(0); }
-      50% { transform: rotateX(360deg) rotateY(360deg); }
-      100% { transform: rotateX(720deg) rotateY(720deg); }
-    }
-
-    input[type="number"] {
-      background-color: #424242; /* Darker input background */
-      color: #f1f1f1;
-      border: none;
-      padding: 5px;
-      border-radius: 5px;
-      width: 60px;
-      text-align: center;
-    }
-
-    input[type="number"]:focus {
-      outline: none;
-      border: 2px solid #ff5252; /* Highlight input on focus (red) */
-    }
-  </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vampire The Masquerade V5 Dice Roller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 200px; /* Width for input boxes */
+            background-color: #333;
+            color: #fff;
+            border: none;
+        }
+        button {
+            background-color: #8B0000; /* Dark red background color for the button */
+            color: #fff; /* White text */
+            cursor: pointer;
+            padding: 10px;
+            width: 150px; /* Shorter button width */
+            margin: 10px auto; /* Center the button */
+            border: none; /* Removed border */
+        }
+        #results {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .dice {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            font-size: 20px;
+            min-width: 50px;
+            background-color: #333;
+        }
+        .regular-dice-high {
+            background-color: #4caf50; /* Green background for dice results 6 or more */
+            animation: roll 0.5s ease-in-out;
+        }
+        .regular-dice-low {
+            background-color: #8B0000; /* Darker red background for dice results 5 or less */
+            animation: roll 0.5s ease-in-out;
+        }
+        .hunger-dice {
+            background-color: #000000; /* Extremely black background for hunger dice */
+            color: red; /* Red text for hunger dice */
+            animation: roll 0.5s ease-in-out;
+        }
+        .critical {
+            color: gold; /* Gold color for critical successes */
+        }
+        .bestial-failure {
+            color: crimson;
+        }
+        .no-animation {
+            animation: none; /* Prevent animation on the critical and failure text */
+        }
+        .hidden {
+            display: none; /* Class to hide elements */
+        }
+        #notification {
+            color: orange;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+            100% { transform: rotate(360deg); } /* Spins only once */
+        }
+        img {
+            width: 150px; /* First image size */
+            height: auto;
+            margin-bottom: 20px;
+            display: block; /* Ensures the image appears centered */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Image at the top center, now half the size -->
-  <img src="https://i.ibb.co/bvyWSfh/Dice-logo.png" alt="Dice-logo" class="top-image">
+    <!-- First Image at the top -->
+    <img src="https://i.ibb.co/bvyWSfh/Dice-logo.png" alt="Vampire the Masquerade" />
 
-  <!-- Page heading -->
-  <h1>Roll Multiple 10-Sided Dice</h1>
+    <h1>Vampire The Masquerade V5 Dice Roller</h1>
 
-  <!-- Input to choose how many dice to roll -->
-  <div style="text-align: center;">
-    <label for="diceCount">How many dice would you like to roll?</label>
-    <input type="number" id="diceCount" min="1" max="30" value="1">
-    <button id="roll-button">Roll Dice</button>
-  </div>
+    <label for="dice">Dice: </label>
+    <input type="number" id="dice" min="1" placeholder="Enter regular dice" required>
+    
+    <label for="hungerDice">Hunger Dice: </label>
+    <input type="number" id="hungerDice" min="0" placeholder="Enter hunger dice" required>
+    
+    <button onclick="rollDice()">Roll Dice</button>
 
-  <!-- The dice container -->
-  <div id="diceContainer" class="dice-container"></div>
+    <div id="notification"></div> <!-- For notifications -->
+    <div id="results"></div>
 
-  <script>
-    const diceContainer = document.getElementById('diceContainer');
-    const rollButton = document.getElementById('roll-button');
-    const diceCountInput = document.getElementById('diceCount');
+    <script>
+        // Ensure only numeric input in dice and hunger dice fields
+        const inputs = document.querySelectorAll('input[type="number"]');
 
-    // Function to create dice elements
-    function createDice() {
-      diceContainer.innerHTML = ''; // Clear the dice container
-      const diceCount = diceCountInput.value;
+        inputs.forEach(input => {
+            input.addEventListener('keydown', function(event) {
+                // Prevent typing non-numeric characters like "e", "-", ".", etc.
+                if (event.key === 'e' || event.key === '-' || event.key === '.' || event.key === '+') {
+                    event.preventDefault();
+                }
+            });
+        });
 
-      // Validation to ensure dice count is not greater than 30
-      if (diceCount > 30) {
-        alert('The maximum number of dice you can roll is 30. Please try again.');
-        return; // Stop execution if more than 30 dice are attempted
-      }
+        // Function to handle dice rolls
+        function rollDice() {
+            let dice = document.getElementById('dice').value; // Number of regular dice
+            let hungerDice = document.getElementById('hungerDice').value; // Number of hunger dice
+            let notification = document.getElementById('notification');
 
-      for (let i = 0; i < diceCount; i++) {
-        const dice = document.createElement('div');
-        dice.classList.add('dice');
-        
-        // Add 10 faces to each dice
-        for (let j = 1; j <= 10; j++) {
-          const face = document.createElement('div');
-          face.classList.add('face');
-          face.innerText = j;
-          dice.appendChild(face);
+            // Clear previous notifications
+            notification.innerHTML = '';
+
+            // Check if both fields are filled
+            if (!dice || !hungerDice) {
+                return; // Do nothing if either of the fields is empty
+            }
+
+            // Parse the values into numbers
+            dice = parseInt(dice);
+            hungerDice = parseInt(hungerDice);
+
+            // Validate the number of regular dice
+            if (dice > 16) {
+                notification.innerHTML = 'Maximum regular dice is 16.';
+                return;
+            }
+
+            // Validate the number of hunger dice
+            if (hungerDice > 5) {
+                notification.innerHTML = 'Maximum hunger dice is 5.';
+                return;
+            }
+
+            let results = document.getElementById('results');
+            results.innerHTML = ''; // Clear previous results
+
+            let diceResults = [];
+            let hungerResults = [];
+
+            // Roll regular dice
+            for (let i = 0; i < dice; i++) {
+                diceResults.push(Math.floor(Math.random() * 10) + 1);
+            }
+
+            // Roll hunger dice
+            for (let i = 0; i < hungerDice; i++) {
+                hungerResults.push(Math.floor(Math.random() * 10) + 1);
+            }
+
+            // Display the results immediately to simulate fast dice rolling
+            displayResults(diceResults, hungerResults);
         }
-        
-        diceContainer.appendChild(dice);
-      }
-    }
 
-    // Function to roll dice
-    function rollAllDice() {
-      const diceElements = diceContainer.querySelectorAll('.dice');
+        // Function to display dice results and handle V5-specific outcomes
+        function displayResults(diceResults, hungerResults) {
+            let resultsDiv = document.getElementById('results');
+            let criticals = 0;
+            let bestialFailure = false;
 
-      diceElements.forEach(dice => {
-        const faces = dice.querySelectorAll('.face');
-        const randomNumber = Math.floor(Math.random() * 10) + 1;
-        
-        dice.style.animation = 'roll 1s ease'; // Start the roll animation
+            resultsDiv.innerHTML += `<h2>Regular Dice Results:</h2>`;
+            diceResults.forEach((roll) => {
+                // Apply different styles based on the dice result
+                if (roll >= 6) {
+                    resultsDiv.innerHTML += `<span class="dice regular-dice-high">${roll}</span> `;
+                } else {
+                    resultsDiv.innerHTML += `<span class="dice regular-dice-low">${roll}</span> `;
+                }
+                if (roll === 10) criticals++;
+            });
 
-        setTimeout(() => {
-          faces.forEach(face => face.style.display = 'none'); // Hide all faces
-          
-          const rolledFace = faces[randomNumber - 1]; // Get the rolled face
+            resultsDiv.innerHTML += `<h2>Hunger Dice Results:</h2>`;
+            hungerResults.forEach((roll) => {
+                if (roll === 10) {
+                    resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span><span class="critical no-animation"> (Messy Critical!)</span> `;
+                    criticals++;
+                } else if (roll === 1) {
+                    resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
+                    bestialFailure = true;
+                } else {
+                    resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
+                }
+            });
 
-          // Apply color based on the rolled number
-          if (randomNumber >= 6) {
-            rolledFace.classList.add('blue');
-            rolledFace.classList.remove('red');
-          } else {
-            rolledFace.classList.add('red');
-            rolledFace.classList.remove('blue');
-          }
+            // Hidden elements: "Outcome:" and "Critical Success!"
+            resultsDiv.innerHTML += `<h2 class="hidden">Outcome:</h2>`;
+            if (criticals >= 2) {
+                resultsDiv.innerHTML += `<p class="critical hidden">Critical Success!</p>`;
+            }
 
-          rolledFace.style.display = 'flex'; // Show the rolled face
-          dice.style.animation = ''; // Reset the animation
-        }, 1000);
-      });
-    }
+            // Show Bestial Failure at the bottom
+            if (bestialFailure) {
+                resultsDiv.innerHTML += `<p class="bestial-failure">Bestial Failure!</p>`;
+            }
+        }
 
-    // Function to handle rolling of dice
-    function handleRoll() {
-      createDice(); // Create the chosen number of dice
-      rollAllDice(); // Roll all the dice
-    }
-
-    // Event listener to trigger dice roll when button is clicked
-    rollButton.addEventListener('click', handleRoll);
-
-    // Event listener to trigger dice roll when 'Enter' key is pressed
-    diceCountInput.addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        handleRoll();
-      }
-    });
-  </script>
-
+        // Adding Enter key support for rolling the dice
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                rollDice();
+            }
+        });
+    </script>
 </body>
 </html>
