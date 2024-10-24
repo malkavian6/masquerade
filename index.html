@@ -213,12 +213,12 @@
                 resultsDiv.innerHTML += `<p class="critical hidden">Critical Success!</p>`;
             }
 
-            // Show Bestial Failure or Messy Critical at the bottom
+            // Show hidden Bestial Failure or Messy Critical at the bottom
             if (bestialFailure) {
-                resultsDiv.innerHTML += `<p class="bestial-failure">Bestial Failure!</p>`;
+                resultsDiv.innerHTML += `<p class="bestial-failure hidden">Bestial Failure!</p>`;
             }
             if (messyCritical) {
-                resultsDiv.innerHTML += `<p class="critical">Messy Critical!</p>`;
+                resultsDiv.innerHTML += `<p class="critical hidden">Messy Critical!</p>`;
             }
         }
 
