@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roll Multiple 10-Sided Dice</title>
+
+  <!-- Google Font for styling -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* General body styling with dark background */
+    body {
+      background-color: #121212; /* Dark background */
+      color: #f1f1f1; /* Light text color */
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* Styling the image to appear at the top center */
+    .top-image {
+      margin-top: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #ff5252; /* Highlighted heading color (red) */
+    }
+
+    label, input, button {
+      font-size: 1.2em;
+      color: #f1f1f1;
+    }
+
+    #roll-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #ff5252; /* Red button */
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #roll-button:hover {
+      background-color: #d32f2f; /* Darker red on hover */
+    }
+
+    /* Dice container and dice styling */
+    .dice-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .dice {
+      width: 100px;
+      height: 100px;
+      position: relative;
+      perspective: 800px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      background-color: #263238; /* Dark dice background */
+    }
+
+    .face {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+
+    .face.blue {
+      background-color: #64b5f6; /* Blue */
+      color: #121212;
+    }
+
+    .face.red {
+      background-color: #ff5252; /* Red */
+      color: #121212;
+    }
+
+    @keyframes roll {
+      0% { transform: rotateX(0) rotateY(0); }
+      50% { transform: rotateX(360deg) rotateY(360deg); }
+      100% { transform: rotateX(720deg) rotateY(720deg); }
+    }
+
+    input[type="number"] {
+      background-color: #424242; /* Darker input background */
+      color: #f1f1f1;
+      border: none;
+      padding: 5px;
+      border-radius: 5px;
+      width: 60px;
+      text-align: center;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border: 2px solid #ff5252; /* Highlight input on focus (red) */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Image at the top center (Original size) -->
+  <img src="https://i.ibb.co/4N9XJKP/vtm.png" alt="Vampire the Masquerade Logo" class="top-image">
+
+  <!-- Page heading -->
+  <h1>Roll Multiple 10-Sided Dice</h1>
+
+  <!-- Input to choose how many dice to roll -->
+  <div style="text-align: center;">
+    <label for="diceCount">How many dice would you like to roll?</label>
+    <input type="number" id="diceCount" min="1" max="30" value="1">
+    <button id="roll-button">Roll Dice</button>
+  </div>
+
+  <!-- The dice container -->
+  <div id="diceContainer" class="dice-container"></div>
+
+  <script>
+    const diceContainer = document.getElementById('diceContainer');
+    const rollButton = document.getElementById('roll-button');
+    const diceCountInput = document.getElementById('diceCount');
+
+    // Function to create dice elements
+    function createDice() {
+      diceContainer.innerHTML = ''; // Clear the dice container
+      const diceCount = diceCountInput.value;
+
+      // Validation to ensure dice count is not greater than 30
+      if (diceCount > 30) {
+        alert('The maximum number of dice you can roll is 30. Please try again.');
+        return; // Stop execution if more than 30 dice are attempted
+      }
+
+      for (let i = 0; i < diceCount; i++) {
+        const dice = document.createElement('div');
+        dice.classList.add('dice');
+        
+        // Add 10 faces to each dice
+        for (let j = 1; j <= 10; j++) {
+          const face = document.createElement('div');
+          face.classList.add('face');
+          face.innerText = j;
+          dice.appendChild(face);
+        }
+        
+        diceContainer.appendChild(dice);
+      }
+    }
+
+    // Function to roll dice
+    function rollAllDice() {
+      const diceElements = diceContainer.querySelectorAll('.dice');
+
+      diceElements.forEach(dice => {
+        const faces = dice.querySelectorAll('.face');
+        const randomNumber = Math.floor(Math.random() * 10) + 1;
+        
+        dice.style.animation = 'roll 1s ease'; // Start the roll animation
+
+        setTimeout(() => {
+          faces.forEach(face => face.style.display = 'none'); // Hide all faces
+          
+          const rolledFace = faces[randomNumber - 1]; // Get the rolled face
+
+          // Apply color based on the rolled number
+          if (randomNumber >= 6) {
+            rolledFace.classList.add('blue');
+            rolledFace.classList.remove('red');
+          } else {
+            rolledFace.classList.add('red');
+            rolledFace.classList.remove('blue');
+          }
+
+          rolledFace.style.display = 'flex'; // Show the rolled face
+          dice.style.animation = ''; // Reset the animation
+        }, 1000);
+      });
+    }
+
+    // Function to handle rolling of dice
+    function handleRoll() {
+      createDice(); // Create the chosen number of dice
+      rollAllDice(); // Roll all the dice
+    }
+
+    // Event listener to trigger dice roll when button is clicked
+    rollButton.addEventListener('click', handleRoll);
+
+    // Event listener to trigger dice roll when 'Enter' key is pressed
+    diceCountInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        handleRoll();
+      }
+    });
+  </script>
+
+</body>
+</html>
