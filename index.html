@@ -14,19 +14,19 @@
         input {
             padding: 10px;
             margin: 10px;
-            width: 200px; /* Width for input boxes */
+            width: 200px;
             background-color: #333;
             color: #fff;
             border: none;
         }
         button {
-            background-color: #8B0000; /* Dark red background color for the button */
-            color: #fff; /* White text */
+            background-color: #8B0000;
+            color: #fff;
             cursor: pointer;
             padding: 10px;
-            width: 150px; /* Shorter button width */
-            margin: 10px auto; /* Center the button */
-            border: none; /* Removed border */
+            width: 150px;
+            margin: 10px auto;
+            border: none;
         }
         #results {
             margin-top: 20px;
@@ -42,29 +42,26 @@
             background-color: #333;
         }
         .regular-dice-high {
-            background-color: #4caf50; /* Green background for dice results 6 or more */
+            background-color: #4caf50;
             animation: roll 0.5s ease-in-out;
         }
         .regular-dice-low {
-            background-color: #8B0000; /* Darker red background for dice results 5 or less */
+            background-color: #8B0000;
             animation: roll 0.5s ease-in-out;
         }
         .hunger-dice {
-            background-color: #000000; /* Extremely black background for hunger dice */
-            color: red; /* Red text for hunger dice */
+            background-color: #000000;
+            color: red;
             animation: roll 0.5s ease-in-out;
         }
         .critical {
-            color: gold; /* Gold color for critical successes */
-        }
-        .bestial-failure {
-            color: crimson;
+            color: gold;
         }
         .no-animation {
-            animation: none; /* Prevent animation on the critical and failure text */
+            animation: none;
         }
         .hidden {
-            display: none; /* Class to hide elements */
+            display: none;
         }
         #notification {
             color: orange;
@@ -74,13 +71,13 @@
         @keyframes roll {
             0% { transform: rotate(0deg); }
             50% { transform: rotate(180deg); }
-            100% { transform: rotate(360deg); } /* Spins only once */
+            100% { transform: rotate(360deg); }
         }
         img {
-            width: 150px; /* First image size */
+            width: 150px;
             height: auto;
             margin-bottom: 20px;
-            display: block; /* Ensures the image appears centered */
+            display: block;
             margin-left: auto;
             margin-right: auto;
         }
@@ -88,7 +85,6 @@
 </head>
 <body>
 
-    <!-- First Image at the top -->
     <img src="https://i.ibb.co/bvyWSfh/Dice-logo.png" alt="Vampire the Masquerade" />
 
     <h1>Vampire The Masquerade V5 Dice Roller</h1>
@@ -101,87 +97,72 @@
     
     <button onclick="rollDice()">Roll Dice</button>
 
-    <div id="notification"></div> <!-- For notifications -->
+    <div id="notification"></div>
     <div id="results"></div>
 
     <script>
-        // Ensure only numeric input in dice and hunger dice fields
         const inputs = document.querySelectorAll('input[type="number"]');
 
         inputs.forEach(input => {
             input.addEventListener('keydown', function(event) {
-                // Prevent typing non-numeric characters like "e", "-", ".", etc.
                 if (event.key === 'e' || event.key === '-' || event.key === '.' || event.key === '+') {
                     event.preventDefault();
                 }
             });
         });
 
-        // Function to handle dice rolls
         function rollDice() {
-            let dice = document.getElementById('dice').value; // Number of regular dice
-            let hungerDice = document.getElementById('hungerDice').value; // Number of hunger dice
+            let dice = document.getElementById('dice').value;
+            let hungerDice = document.getElementById('hungerDice').value;
             let notification = document.getElementById('notification');
 
-            // Clear previous notifications
             notification.innerHTML = '';
 
-            // If both fields are empty or both contain 0, do nothing
             if ((dice === '0' && hungerDice === '0') || (!dice && !hungerDice)) {
                 return;
             }
 
-            // Parse the values into numbers
             dice = parseInt(dice);
             hungerDice = parseInt(hungerDice);
 
-            // Validate the number of regular dice
             if (dice > 16) {
                 notification.innerHTML = 'Maximum regular dice is 16.';
                 return;
             }
 
-            // Validate the number of hunger dice
             if (hungerDice > 5) {
                 notification.innerHTML = 'Maximum hunger dice is 5.';
                 return;
             }
 
             let results = document.getElementById('results');
-            results.innerHTML = ''; // Clear previous results
+            results.innerHTML = '';
 
             let diceResults = [];
             let hungerResults = [];
 
-            // Roll regular dice only if dice > 0
             if (dice > 0) {
                 for (let i = 0; i < dice; i++) {
                     diceResults.push(Math.floor(Math.random() * 10) + 1);
                 }
             }
 
-            // Roll hunger dice only if hungerDice > 0
             if (hungerDice > 0) {
                 for (let i = 0; i < hungerDice; i++) {
                     hungerResults.push(Math.floor(Math.random() * 10) + 1);
                 }
             }
 
-            // Display the results only if either diceResults or hungerResults are present
             displayResults(diceResults, hungerResults);
         }
 
-        // Function to display dice results and handle V5-specific outcomes
         function displayResults(diceResults, hungerResults) {
             let resultsDiv = document.getElementById('results');
             let criticals = 0;
-            let messyCritical = false;
-            let bestialFailure = false;
 
             if (diceResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Regular Dice Results:</h2>`;
                 diceResults.forEach((roll) => {
-                    // Apply different styles based on the dice result
                     if (roll >= 6) {
                         resultsDiv.innerHTML += `<span class="dice regular-dice-high">${roll}</span> `;
                     } else {
@@ -196,33 +177,19 @@
                 hungerResults.forEach((roll) => {
                     if (roll === 10) {
                         resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
-                        messyCritical = true;
                         criticals++;
-                    } else if (roll === 1) {
-                        resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
-                        bestialFailure = true;
                     } else {
                         resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
                     }
                 });
             }
 
-            // Hidden elements: "Outcome:" and "Critical Success!"
             if (criticals >= 2) {
-                resultsDiv.innerHTML += `<h2 class="hidden">Outcome:</h2>`;
-                resultsDiv.innerHTML += `<p class="critical hidden">Critical Success!</p>`;
-            }
-
-            // Show hidden Bestial Failure or Messy Critical at the bottom
-            if (bestialFailure) {
-                resultsDiv.innerHTML += `<p class="bestial-failure hidden">Bestial Failure!</p>`;
-            }
-            if (messyCritical) {
-                resultsDiv.innerHTML += `<p class="critical hidden">Messy Critical!</p>`;
+                resultsDiv.innerHTML += `<h2>Outcome:</h2>`;
+                resultsDiv.innerHTML += `<p class="critical">Critical Success!</p>`;
             }
         }
 
-        // Adding Enter key support for rolling the dice
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 rollDice();
