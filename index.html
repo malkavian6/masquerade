@@ -158,7 +158,6 @@
 
         function displayResults(diceResults, hungerResults) {
             let resultsDiv = document.getElementById('results');
-            let criticals = 0;
 
             if (diceResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Regular Dice Results:</h2>`;
@@ -168,7 +167,6 @@
                     } else {
                         resultsDiv.innerHTML += `<span class="dice regular-dice-low">${roll}</span> `;
                     }
-                    if (roll === 10) criticals++;
                 });
             }
 
@@ -177,16 +175,10 @@
                 hungerResults.forEach((roll) => {
                     if (roll === 10) {
                         resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
-                        criticals++;
                     } else {
                         resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
                     }
                 });
-            }
-
-            if (criticals >= 2) {
-                resultsDiv.innerHTML += `<h2>Outcome:</h2>`;
-                resultsDiv.innerHTML += `<p class="critical">Critical Success!</p>`;
             }
         }
 
