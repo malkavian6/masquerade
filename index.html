@@ -68,6 +68,9 @@
             margin-top: 10px;
             font-size: 16px;
         }
+        #audioContainer {
+            margin-top: 20px;
+        }
         @keyframes roll {
             0% { transform: rotate(0deg); }
             50% { transform: rotate(180deg); }
@@ -99,6 +102,13 @@
 
     <div id="notification"></div>
     <div id="results"></div>
+
+    <div id="audioContainer">
+        <h2>Play YouTube Audio</h2>
+        <input type="text" id="youtubeLink" placeholder="Paste YouTube link here">
+        <button onclick="playYouTubeAudio()">Play Audio</button>
+        <div id="youtubePlayer"></div>
+    </div>
 
     <script>
         const inputs = document.querySelectorAll('input[type="number"]');
@@ -179,6 +189,18 @@
                         resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
                     }
                 });
+            }
+        }
+
+        function playYouTubeAudio() {
+            const link = document.getElementById('youtubeLink').value;
+            const videoId = link.split('v=')[1]?.split('&')[0];
+
+            if (videoId) {
+                const iframe = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                document.getElementById('youtubePlayer').innerHTML = iframe;
+            } else {
+                alert('Please enter a valid YouTube link.');
             }
         }
 
