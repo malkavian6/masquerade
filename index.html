@@ -11,24 +11,20 @@
             text-align: center;
             margin-top: 50px;
         }
-        input {
+        input, button {
             padding: 10px;
             margin: 10px;
-            width: 200px;
             background-color: #333;
             color: #fff;
             border: none;
+            width: 200px;
         }
         button {
-            background-color: #8B0000;
-            color: #fff;
-            cursor: pointer;
-            padding: 10px;
             width: 150px;
-            margin: 10px auto;
-            border: none;
+            background-color: #8B0000;
+            cursor: pointer;
         }
-        #results {
+        #results, #notification {
             margin-top: 20px;
             font-size: 18px;
         }
@@ -43,33 +39,15 @@
         }
         .regular-dice-high {
             background-color: #4caf50;
-            animation: roll 0.5s ease-in-out;
         }
-        .regular-dice-low {
+        .regular-dice-low, .hunger-dice {
             background-color: #8B0000;
-            animation: roll 0.5s ease-in-out;
         }
         .hunger-dice {
-            background-color: #000000;
             color: red;
-            animation: roll 0.5s ease-in-out;
         }
         .critical {
             color: gold;
-        }
-        .no-animation {
-            animation: none;
-        }
-        .hidden {
-            display: none;
-        }
-        #notification {
-            color: orange;
-            margin-top: 10px;
-            font-size: 16px;
-        }
-        #audioContainer {
-            margin-top: 20px;
         }
         @keyframes roll {
             0% { transform: rotate(0deg); }
@@ -89,7 +67,6 @@
 <body>
 
     <img src="https://i.ibb.co/bvyWSfh/Dice-logo.png" alt="Vampire the Masquerade" />
-
     <h1>Vampire: The Masquerade Dice Roller</h1>
 
     <label for="dice">Dice: </label>
@@ -99,20 +76,16 @@
     <input type="number" id="hungerDice" min="0" placeholder="Enter hunger dice" required>
     
     <button onclick="rollDice()">Roll Dice</button>
-
     <div id="notification"></div>
     <div id="results"></div>
 
-    <div id="audioContainer">
-        <h2>Play YouTube Audio</h2>
-        <input type="text" id="youtubeLink" placeholder="Paste YouTube link here">
-        <button onclick="playYouTubeAudio()">Play Audio</button>
-        <div id="youtubePlayer"></div>
-    </div>
+    <audio id="sound1" src="http://sndup.net/cqcr8"></audio>
+    <audio id="sound2" src="https://sndup.net/y88vv/"></audio>
+    <audio id="sound3" src="https://sndup.net/3xkjf/"></audio>
+    <audio id="sound4" src="https://sndup.net/kpxfq/"></audio>
 
     <script>
         const inputs = document.querySelectorAll('input[type="number"]');
-
         inputs.forEach(input => {
             input.addEventListener('keydown', function(event) {
                 if (event.key === 'e' || event.key === '-' || event.key === '.' || event.key === '+') {
@@ -127,7 +100,6 @@
             let notification = document.getElementById('notification');
 
             notification.innerHTML = '';
-
             if ((dice === '0' && hungerDice === '0') || (!dice && !hungerDice)) {
                 return;
             }
@@ -139,7 +111,6 @@
                 notification.innerHTML = 'Maximum regular dice is 16.';
                 return;
             }
-
             if (hungerDice > 5) {
                 notification.innerHTML = 'Maximum hunger dice is 5.';
                 return;
@@ -156,7 +127,6 @@
                     diceResults.push(Math.floor(Math.random() * 10) + 1);
                 }
             }
-
             if (hungerDice > 0) {
                 for (let i = 0; i < hungerDice; i++) {
                     hungerResults.push(Math.floor(Math.random() * 10) + 1);
@@ -164,11 +134,11 @@
             }
 
             displayResults(diceResults, hungerResults);
+            playRandomSound();
         }
 
         function displayResults(diceResults, hungerResults) {
             let resultsDiv = document.getElementById('results');
-
             if (diceResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Regular Dice Results:</h2>`;
                 diceResults.forEach((roll) => {
@@ -179,7 +149,6 @@
                     }
                 });
             }
-
             if (hungerResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Hunger Dice Results:</h2>`;
                 hungerResults.forEach((roll) => {
@@ -192,23 +161,11 @@
             }
         }
 
-        function playYouTubeAudio() {
-            const link = document.getElementById('youtubeLink').value;
-            const videoId = link.split('v=')[1]?.split('&')[0];
-
-            if (videoId) {
-                const iframe = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                document.getElementById('youtubePlayer').innerHTML = iframe;
-            } else {
-                alert('Please enter a valid YouTube link.');
-            }
+        function playRandomSound() {
+            const sounds = [document.getElementById('sound1'), document.getElementById('sound2'), document.getElementById('sound3'), document.getElementById('sound4')];
+            const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+            randomSound.play();
         }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                rollDice();
-            }
-        });
     </script>
 </body>
 </html>
