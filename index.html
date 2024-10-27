@@ -90,7 +90,7 @@
 
     <img src="https://i.ibb.co/bvyWSfh/Dice-logo.png" alt="Vampire the Masquerade" />
 
-    <h1>Vampire: The Masquerade Dice Roller</h1>
+    <h1>Vampire The Masquerade: Dice Roller</h1>
 
     <label for="dice">Dice: </label>
     <input type="number" id="dice" min="0" placeholder="Enter regular dice" required>
@@ -170,23 +170,23 @@
             let resultsDiv = document.getElementById('results');
 
             if (diceResults.length > 0) {
-                resultsDiv.innerHTML += <h2>Regular Dice Results:</h2>;
+                resultsDiv.innerHTML += `<h2>Regular Dice Results:</h2>`;
                 diceResults.forEach((roll) => {
                     if (roll >= 6) {
-                        resultsDiv.innerHTML += <span class="dice regular-dice-high">${roll}</span> ;
+                        resultsDiv.innerHTML += `<span class="dice regular-dice-high">${roll}</span> `;
                     } else {
-                        resultsDiv.innerHTML += <span class="dice regular-dice-low">${roll}</span> ;
+                        resultsDiv.innerHTML += `<span class="dice regular-dice-low">${roll}</span> `;
                     }
                 });
             }
 
             if (hungerResults.length > 0) {
-                resultsDiv.innerHTML += <h2>Hunger Dice Results:</h2>;
+                resultsDiv.innerHTML += `<h2>Hunger Dice Results:</h2>`;
                 hungerResults.forEach((roll) => {
                     if (roll === 10) {
-                        resultsDiv.innerHTML += <span class="dice hunger-dice">${roll}</span> ;
+                        resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
                     } else {
-                        resultsDiv.innerHTML += <span class="dice hunger-dice">${roll}</span> ;
+                        resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
                     }
                 });
             }
@@ -197,7 +197,7 @@
             const videoId = link.split('v=')[1]?.split('&')[0];
 
             if (videoId) {
-                const iframe = <iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>;
+                const iframe = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 document.getElementById('youtubePlayer').innerHTML = iframe;
             } else {
                 alert('Please enter a valid YouTube link.');
