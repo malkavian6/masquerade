@@ -107,6 +107,7 @@
         <h2>Play YouTube Audio</h2>
         <input type="text" id="youtubeLink" placeholder="Paste YouTube link here">
         <button onclick="playYouTubeAudio()">Play Audio</button>
+        <button onclick="stopYouTubeAudio()">Stop Audio</button>
         <div id="youtubePlayer"></div>
     </div>
 
@@ -202,6 +203,10 @@
             } else {
                 alert('Please enter a valid YouTube link.');
             }
+        }
+
+        function stopYouTubeAudio() {
+            document.getElementById('youtubePlayer').innerHTML = '';
         }
 
         document.addEventListener('keydown', function(event) {
