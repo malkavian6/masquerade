@@ -122,6 +122,7 @@
 
             notification.innerHTML = '';
 
+            // If both dice and hungerDice are not entered, exit function
             if ((dice === '0' && hungerDice === '0') || (!dice && !hungerDice)) {
                 return;
             }
@@ -163,6 +164,7 @@
         function displayResults(diceResults, hungerResults) {
             let resultsDiv = document.getElementById('results');
 
+            // If there are regular dice rolls, display them
             if (diceResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Regular Dice Results:</h2>`;
                 diceResults.forEach((roll) => {
@@ -174,6 +176,7 @@
                 });
             }
 
+            // If there are hunger dice rolls, display them
             if (hungerResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Hunger Dice Results:</h2>`;
                 hungerResults.forEach((roll) => {
@@ -183,10 +186,21 @@
         }
 
         function copyToClipboard() {
-            // Format the result as: "Dice: 1, 4, 5, 6 and Hunger die: 1"
-            let formattedText = `Dice: ${diceResults.join(", ")} and Hunger die: ${hungerResults.join(", ")}`;
-            
-            // Create a temporary textarea to copy text
+            let formattedText = "";
+            // If both regular dice and hunger dice are available
+            if (diceResults.length > 0 && hungerResults.length > 0) {
+                formattedText = `Dice: ${diceResults.join(", ")} and Hunger die: ${hungerResults.join(", ")}`;
+            }
+            // If only regular dice are available
+            else if (diceResults.length > 0) {
+                formattedText = `Dice: ${diceResults.join(", ")}`;
+            }
+            // If only hunger dice are available
+            else if (hungerResults.length > 0) {
+                formattedText = `Hunger die: ${hungerResults.join(", ")}`;
+            }
+
+            // Create a temporary textarea to copy the text
             let textArea = document.createElement("textarea");
             textArea.value = formattedText;
             document.body.appendChild(textArea);
@@ -194,7 +208,7 @@
             document.execCommand("copy");
             document.body.removeChild(textArea);
 
-            // Optionally: You can display a small visual cue like a "Copied!" text here, but no alert.
+            // Optionally, you can display a small visual cue like a "Copied!" text here, but no alert.
         }
 
         document.addEventListener('keydown', function(event) {
