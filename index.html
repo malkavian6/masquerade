@@ -68,9 +68,6 @@
             margin-top: 10px;
             font-size: 16px;
         }
-        #audioContainer {
-            margin-top: 20px;
-        }
         @keyframes roll {
             0% { transform: rotate(0deg); }
             50% { transform: rotate(180deg); }
@@ -100,19 +97,15 @@
     
     <button onclick="rollDice()">Roll Dice</button>
 
+    <button id="copyButton" onclick="copyToClipboard()">Copy to Clipboard</button>
+
     <div id="notification"></div>
     <div id="results"></div>
 
-    <div id="audioContainer">
-        <h2>Play YouTube Audio</h2>
-        <input type="text" id="youtubeLink" placeholder="Paste YouTube link here">
-        <button onclick="playYouTubeAudio()">Play Audio</button>
-        <button onclick="stopYouTubeAudio()">Stop Audio</button>
-        <div id="youtubePlayer"></div>
-    </div>
-
     <script>
         const inputs = document.querySelectorAll('input[type="number"]');
+        let diceResults = [];
+        let hungerResults = [];
 
         inputs.forEach(input => {
             input.addEventListener('keydown', function(event) {
@@ -149,8 +142,8 @@
             let results = document.getElementById('results');
             results.innerHTML = '';
 
-            let diceResults = [];
-            let hungerResults = [];
+            diceResults = [];
+            hungerResults = [];
 
             if (dice > 0) {
                 for (let i = 0; i < dice; i++) {
@@ -184,29 +177,24 @@
             if (hungerResults.length > 0) {
                 resultsDiv.innerHTML += `<h2>Hunger Dice Results:</h2>`;
                 hungerResults.forEach((roll) => {
-                    if (roll === 10) {
-                        resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
-                    } else {
-                        resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
-                    }
+                    resultsDiv.innerHTML += `<span class="dice hunger-dice">${roll}</span> `;
                 });
             }
         }
 
-        function playYouTubeAudio() {
-            const link = document.getElementById('youtubeLink').value;
-            const videoId = link.split('v=')[1]?.split('&')[0];
+        function copyToClipboard() {
+            // Format the result as: "Dice: 1, 4, 5, 6 and Hunger die: 1"
+            let formattedText = `Dice: ${diceResults.join(", ")} and Hunger die: ${hungerResults.join(", ")}`;
+            
+            // Create a temporary textarea to copy text
+            let textArea = document.createElement("textarea");
+            textArea.value = formattedText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
 
-            if (videoId) {
-                const iframe = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                document.getElementById('youtubePlayer').innerHTML = iframe;
-            } else {
-                alert('Please enter a valid YouTube link.');
-            }
-        }
-
-        function stopYouTubeAudio() {
-            document.getElementById('youtubePlayer').innerHTML = '';
+            // Optionally: You can display a small visual cue like a "Copied!" text here, but no alert.
         }
 
         document.addEventListener('keydown', function(event) {
