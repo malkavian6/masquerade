@@ -186,6 +186,11 @@
         }
 
         function copyToClipboard() {
+            // If both diceResults and hungerResults are empty, do nothing
+            if (diceResults.length === 0 && hungerResults.length === 0) {
+                return; // Exit early
+            }
+
             let formattedText = "";
             // If both regular dice and hunger dice are available
             if (diceResults.length > 0 && hungerResults.length > 0) {
@@ -207,8 +212,6 @@
             textArea.select();
             document.execCommand("copy");
             document.body.removeChild(textArea);
-
-            // Optionally, you can display a small visual cue like a "Copied!" text here, but no alert.
         }
 
         document.addEventListener('keydown', function(event) {
